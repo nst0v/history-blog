@@ -29,9 +29,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'avatar' => fake()->optional(0.3)->imageUrl(200, 200, 'people'),
-            'bio' => fake()->optional(0.7)->paragraph(2),
-            'role' => fake()->randomElement(['user', 'author', 'admin']),
-            'is_active' => fake()->boolean(90), // 90% активных
+            'bio' => fake()->optional(0.7)->paragraph(),
+            'role' => 'user',
+            'is_active' => true,
             'remember_token' => Str::random(10),
         ];
     }
@@ -50,7 +50,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'role' => 'admin',
-            'is_active' => true,
+            'bio' => 'Администратор исторического блога',
         ]);
     }
 
@@ -58,14 +58,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'role' => 'author',
-            'is_active' => true,
-            'bio' => 'Историк, специализирующийся на ' . fake()->randomElement([
-                'древней истории',
-                'средневековье',
-                'новом времени',
-                'военной истории',
-                'археологии'
-            ]),
+            'bio' => fake()->paragraph(),
         ]);
     }
 }

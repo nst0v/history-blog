@@ -25,11 +25,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'is_active' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_active' => 'boolean',
+        ];
+    }
 
     // Связи
     public function posts()
@@ -42,19 +45,19 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function media()
-    {
-        return $this->hasMany(Media::class, 'uploaded_by');
-    }
-
-    // Методы-помощники
-    public function isAdmin()
+    // Методы для ролей
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
-    public function isAuthor()
+    public function isAuthor(): bool
     {
         return in_array($this->role, ['admin', 'author']);
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
     }
 }
